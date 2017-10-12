@@ -38,3 +38,7 @@ jspm_packages
 .babel_cache
 
 src/server-es5.js
+/package-lock.json
+
+.DS_Store
+public/js/compiled/

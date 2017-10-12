@@ -1,13 +1,15 @@
 import React from 'react';
 import NotFoundPage from './NotFoundPage';
+
 import PrismicReact from '../../prismic-react';
 import TextSection from './slices/TextSection';
 import FullWidthImage from './slices/FullWidthImage';
 import Quote from './slices/Quote';
 import ImageGallery from './slices/ImageGallery';
 import ImageHighlight from './slices/ImageHighlight';
+import HomeBanner from './slices/HomeBanner';
 
-class Page extends React.Component {
+class HomePage extends React.Component {
   
   constructor(props) {
     super(props);
@@ -16,6 +18,14 @@ class Page extends React.Component {
       notFound: false,
       linkResolver : null,
     };
+  }
+  
+  componentWillMount() {
+    if (typeof document !== 'undefined') document.body.classList.add('homepage');
+  }
+  
+  componentWillUnmount() {
+    if (typeof document !== 'undefined') document.body.classList.remove('homepage');
   }
 
   render() {
@@ -45,20 +55,23 @@ class Page extends React.Component {
         }
       });
       
-      return(
-        <div className="container" data-wio-id={document.id}>
-          { pageContent }
+      return (
+        <div data-wio-id={document.id}>
+          <HomeBanner document={document}/>
+          <div className="container">
+            { pageContent }
+          </div>
         </div>
       );
     } else if (this.state.notFound) {
       return <NotFoundPage />;
     } else {
-      return <div>Loading</div>;
+      return <div>Loading...</div>;
     }
   }
 }
 
 export default PrismicReact.UniversalComponent({
-  request: (ctx, props) => ctx.api.getByUID('page', props.match.params.uid, {}),
-  component: Page
+  request: (ctx, props) => ctx.api.getSingle('homepage', {}),
+  component: HomePage
 });
